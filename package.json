@@ -1,26 +1,12 @@
 {
-  "name": "angular-electron",
-  "version": "10.4.1",
-  "description": "Angular 13 with Electron 16 (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "cadit-jeremy",
+  "version": "1.0.0",
+  "description": "CADIT Assessment test app  built on Angular 13 with Electron 16 (Typescript + SASS + Hot Reload)",
+  "homepage": "https://github.com/namasayajeremy/jeremy-cadit",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Jeremy Marvin C",
+    "email": "jeremymarvinc@gmail.com"
   },
-  "keywords": [
-    "angular",
-    "angular 13",
-    "electron",
-    "electron 16",
-    "nodejs",
-    "typescript",
-    "playwright",
-    "eslint",
-    "sass",
-    "windows",
-    "mac",
-    "linux"
-  ],
   "main": "app/main.js",
   "private": true,
   "scripts": {
