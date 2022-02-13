@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="app-header">
+    <mat-form-field class="no-hint">
+      <mat-label>User Data Link</mat-label>
+      <input matInput type="link" [(ngModel)]="dataSourceLink"/>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      [disabled]="disableFetchBtn"
+      (click)="fetchUserBtn(dataSourceLink)"
+    >
+      Fetch User Data
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      [disabled]="disableAddSlryBtn"
+      (click)="addSalaryBtn()"
+    >
+      Add Salary Data
+    </button>
+  </div>
+  <table mat-table [dataSource]="userDatas" class="mat-elevation-z8 mat-small">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef>Username</th>
+      <td mat-cell *matCellDef="let user">{{ user.username }}</td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+    </ng-container>
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Address</th>
+      <td mat-cell *matCellDef="let user">
+        {{ user.address.street }}, {{ user.address.suite }},
+        {{ user.address.city }}, {{ user.address.zipcode }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef>Phone</th>
+      <td mat-cell *matCellDef="let user">{{ user.phone }}</td>
+    </ng-container>
+    <ng-container matColumnDef="salaryInIDR">
+      <th mat-header-cell *matHeaderCellDef>Salary in IDR</th>
+      <td mat-cell *matCellDef="let user">Rp. {{ user.salaryInIDR }}</td>
+    </ng-container>
+    <ng-container matColumnDef="salaryInUSD">
+      <th mat-header-cell *matHeaderCellDef>Salary in USD</th>
+      <td mat-cell *matCellDef="let user">${{ user.salaryInUSD }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+
+</div>

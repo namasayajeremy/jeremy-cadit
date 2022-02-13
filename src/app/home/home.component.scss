@@ -1,3 +1,14 @@
-:host {
-  
+.container {
+  margin: 1.5rem;
+}
+
+.box-menu-container {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  height: fit-content;
+}
+
+.box-menu {
+  height: 150px;
 }

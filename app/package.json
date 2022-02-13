@@ -3,5 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "fs.js": "^0.0.1"
+  }
 }

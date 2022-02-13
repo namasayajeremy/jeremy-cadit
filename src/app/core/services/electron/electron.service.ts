@@ -41,4 +41,8 @@ export class ElectronService {
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
   }
+  async openDialog(){
+    const res = await ipcRenderer.invoke('open-file-dialog');
+    return res;
+  }
 }

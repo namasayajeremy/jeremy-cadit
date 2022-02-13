@@ -1,7 +1,17 @@
 <div class="container">
-  <h1 class="title">
-    {{ 'PAGES.HOME.TITLE' | translate }}
-  </h1>
-
-  <a routerLink="/detail">{{ 'PAGES.HOME.GO_TO_DETAIL' | translate }}</a>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>CADIT Assessment Test App</mat-card-title>
+      <mat-card-subtitle>Jeremy Marvin Christian</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      penjelasan lebih lanjut
+    </mat-card-content>
+  </mat-card>
+  <br>
+  <div class="box-menu-container">
+    <button mat-raised-button routerLink="/salary" class="box-menu">Salary Converter</button>
+    <button mat-raised-button routerLink="/sensor/file" class="box-menu">Sensor Insights(file)</button>
+    <button mat-raised-button routerLink="/sensor/simulation" class="box-menu">Sensor Insights(simulation)</button>
+  </div>
 </div>

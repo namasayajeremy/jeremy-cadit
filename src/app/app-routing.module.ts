@@ -1,28 +1,41 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { PageNotFoundComponent } from './shared/components';
-
-import { HomeRoutingModule } from './home/home-routing.module';
-import { DetailRoutingModule } from './detail/detail-routing.module';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { SalaryConverterComponent } from './salary-converter/salary-converter.component';
+import { FileComponent } from './sensor/file/file.component';
+import { SimulationComponent } from './sensor/simulation/simulation.component';
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
+    path: 'home',
+    component: HomeComponent,
   },
   {
-    path: '**',
-    component: PageNotFoundComponent
-  }
+    path: 'salary',
+    component: SalaryConverterComponent,
+  },
+  {
+    path: 'sensor',
+    children: [
+      {
+        path: 'file',
+        component: FileComponent,
+      },
+      {
+        path: 'simulation',
+        component: SimulationComponent,
+      },
+    ],
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home',
+  },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
-    HomeRoutingModule,
-    DetailRoutingModule
-  ],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
