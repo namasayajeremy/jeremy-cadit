@@ -1,42 +1,65 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { MathService } from './math.service';
-import { IGroupedInsights, IGroupHelper, IRawData } from './sensor-model';
+import {
+  IGroupedInsights,
+  IGroupHelper,
+  IInsight,
+  IInsightsContainer,
+  IRawData,
+} from './sensor-model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GroupingService {
-  constructor(private math: MathService) {}
+  constructor(private math: MathService, private snackbar: MatSnackBar) {}
 
-  groupbyRoom(sensorDatas: IRawData[]) {
+  getAllInsights(sensorDatas: IRawData[]): IInsightsContainer {
+    return {
+      room: this.groupbyRoom(sensorDatas),
+      day: this.groupbyDay(sensorDatas),
+    };
+  }
+
+  /**
+   * Calls grouping function with an argument to group by 'roomArea'
+   *
+   * @param sensorDatas
+   * @returns Grouped room data insights
+   */
+  groupbyRoom(sensorDatas: IRawData[]): IGroupedInsights[] {
     const groupBy = 'roomArea';
     const groupedData = this.groupData(sensorDatas, groupBy);
-    return this.calculateInsights(groupedData, groupBy);
+    const groupedDataInsights = this.getInsights(groupedData);
+    return groupedDataInsights;
   }
 
   /**
-   * Format each sensor data to include its date(as a string).
-   * Date is formatted as a string to support grouping function.
-   * the date-containing property will be mapped back to Date later to enable proper sorting.
+   * Calls grouping function with an argument of 'timestamp' from a formatted sensor data.
    *
    * @param sensorDatas raw datas from json file
-   * @returns Calculated grouped data insights
+   * @returns Formatted grouped day data insights
    */
   groupbyDay(sensorDatas: IRawData[]): IGroupedInsights[] {
-    const newSensorDatas = sensorDatas.map(this.convertDatetoString);
+    const newSensorDatas = sensorDatas.map(this.dateAsString);
     const groupBy = 'timestamp';
     const groupedData = this.groupData(newSensorDatas, groupBy);
-    return this.calculateInsights(groupedData, groupBy);
+    const groupedDataInsights = this.getInsights(groupedData).map(
+      this.dateAsDate
+    );
+    return groupedDataInsights.sort(
+      (a, b) => +new Date(a.group) - +new Date(b.group)
+    );
   }
 
   /**
-   * Group data to a helper object consisted of arrays of sensor data objects.
-   * Each array contains all data objects related to its roomArea/day group
-   * Expected object structure example:
+   * Group data to a helper object containing arrays of sensor data objects.
+   * Expected object structures are as example:
    * {
    *  "roomArea1": [
-   *    rawData1,
+   *    rawData1, //IRawData object
    *    rawData2
    *  ],
    *  "roomArea2": [
@@ -45,7 +68,7 @@ export class GroupingService {
    *  ]
    *}
    *
-   * @param sensorDatas passed sensor data that may have been mapped
+   * @param sensorDatas
    * @param groupBy grouping parameter (roomarea/timestamp)
    * @returns grouped data object
    */
@@ -53,56 +76,64 @@ export class GroupingService {
     const groupedData: IGroupHelper = {};
     sensorDatas.forEach((sensorData) => {
       const group = sensorData[groupBy];
-      return groupedData[group] // checks if the specific group(area/date) array had existed
-        ? groupedData[group].push(sensorData) // if true, push sensor data to the array
-        : (groupedData[group] = [sensorData]); // if false, initialize the array
+      return groupedData[group] // checks if the specific group name had existed (ex: roomArea1, 12/20/2021)
+        ? groupedData[group].push(sensorData) // push sensor data to the array
+        : (groupedData[group] = [sensorData]); // else, initialize the array
     });
     return groupedData;
   }
 
   /**
-   * Calculate the data insights(min, max, avg, median) of each group.
+   * Iterates through the grouped data to get its insight.
    *
    * @param groupedData
    * @param groupBy
-   * @returns
+   * @returns array of grouped data insights
    */
-  calculateInsights(
-    groupedData: IGroupHelper,
-    groupBy: string
-  ): IGroupedInsights[] {
+  getInsights(groupedData: IGroupHelper): IGroupedInsights[] {
     const groupedInsights: IGroupedInsights[] = [];
+    //loop through every group
     for (const group in groupedData) {
+      //avoid processing object's prototype
       if (!groupedData.hasOwnProperty(group)) {
-        //avoid processing object's prototype
         continue;
       }
-      const tempArray = groupedData[group] //create helper array consisting of temperature datas
+
+      //create helper arrays for each sensor's parameter
+      const tempArray = groupedData[group]
         .map((data) => data.temperature)
-        .sort((a, b) => a - b); //sort ascending to help calculation
-      const humArray = groupedData[group]//similar to tempArray but for humidity
+        .sort((a, b) => a - b); //sort ascending
+      const humArray = groupedData[group]
         .map((data) => data.humidity)
         .sort((a, b) => a - b);
+
+      //calls the helper function to calculate the insight
       groupedInsights.push({
-        group: groupBy === 'roomArea' ? group : new Date(group), //assign group name (ex: roomArea1, 20/01/2022).
-        temperature: {
-          min: this.math.minimum(tempArray),//calculation in math service
-          max: this.math.maximum(tempArray),
-          average: this.math.average(tempArray),
-          median: this.math.median(tempArray),
-        },
-        humidity: {
-          min: this.math.minimum(humArray),
-          max: this.math.maximum(humArray),
-          average: this.math.average(humArray),
-          median: this.math.median(humArray),
-        },
+        group,
+        temperature: this.calcInsight(tempArray),
+        humidity: this.calcInsight(humArray),
       });
     }
     return groupedInsights;
   }
 
-  convertDatetoString(sensorData: IRawData) {
+  /**
+   * Calls the math service to calculate the min, max, average, and median of the array
+   *
+   * @param dataArray datasource for insight calculation
+   * @returns IInsight object
+   */
+  calcInsight(dataArray: number[]): IInsight {
+    return {
+      min: this.math.minimum(dataArray),
+      max: this.math.maximum(dataArray),
+      average: this.math.average(dataArray),
+      median: this.math.median(dataArray),
+    };
+  }
+
+  //#region other functions
+  dateAsString(sensorData: IRawData) {
     return {
       ...sensorData,
       timestamp: formatDate(
@@ -112,4 +143,37 @@ export class GroupingService {
       ),
     } as IRawData;
   }
+
+  dateAsDate(groupedData: IGroupedInsights) {
+    return {
+      ...groupedData,
+      group: new Date(groupedData.group),
+    } as IGroupedInsights;
+  }
+
+  isSensorData(sensorDatas: IRawData[]): IRawData[] {
+    return sensorDatas[0].temperature ? sensorDatas : null;
+  }
+
+  openSuccess(path?: string) {
+    if (path) {
+      this.snackbar.open(`File path: ${path}`, 'close');
+    }
+  }
+
+  wrongFile() {
+    this.snackbar.open(
+      'Wrong file! Please try again and make sure its the sensor file.',
+      'close'
+    );
+  }
+
+  hintNotif() {
+    this.snackbar.open(
+      'Please choose the grouping criteria by clicking "Room" or "Day" toggle.',
+      'close'
+    );
+  }
+
+  //#endregion
 }

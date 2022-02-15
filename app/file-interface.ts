@@ -10,6 +10,10 @@ ipcMain.handle('open-file-dialog', () => {
     .then((res) => readFile(res.filePaths[0]));
 });
 
-function readFile(path:string){
-  return (JSON.parse(fs.readFileSync(path,'utf8'))).array as Array<object>
+function readFile(path: string) {
+  const res = {
+    path,
+    data: JSON.parse(fs.readFileSync(path, 'utf8')).array as Array<object>,
+  };
+  return res;
 }

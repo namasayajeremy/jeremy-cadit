@@ -7,7 +7,7 @@ import * as childProcess from 'child_process';
 import * as fs from 'fs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ElectronService {
   ipcRenderer: typeof ipcRenderer;
@@ -41,8 +41,7 @@ export class ElectronService {
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
   }
-  async openDialog(){
-    const res = await ipcRenderer.invoke('open-file-dialog');
-    return res;
+  openDialog() {
+    return ipcRenderer.invoke('open-file-dialog');
   }
 }

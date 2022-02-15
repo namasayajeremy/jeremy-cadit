@@ -46,12 +46,29 @@ export class SalaryService {
     });
   }
 
+
+  //#region other functions
   round(num: number) {
     const dec = 100;
     return Math.round(num * dec) / dec;
   }
 
-  wrongFile(){
-    this.snackbar.open('Wrong file! Please try again and make sure its the salary file.','Close',{duration:3000});
+  isSalaryData(salaries: ISalaryInIDR[]): ISalaryInIDR[] {
+    return salaries[0].salaryInIDR ? salaries : null;
   }
+
+  openSuccess(path?: string) {
+    if(path){
+      this.snackbar.open(`File path: ${path}`, 'Close');
+    }
+  }
+
+  wrongFile() {
+    this.snackbar.open(
+      'Wrong file! Please try again and make sure its the salary file.',
+      'Close',
+      { duration: 3000 }
+    );
+  }
+  //#endregion
 }

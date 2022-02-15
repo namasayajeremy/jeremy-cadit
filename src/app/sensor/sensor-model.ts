@@ -6,13 +6,18 @@ export interface IRawData {
   timestamp: number | string | Date;
 }
 
-export interface IGroupedInsights {
-  group: string | Date;
-  temperature: IInsights;
-  humidity: IInsights;
+export interface IInsightsContainer {
+  room: IGroupedInsights[];
+  day: IGroupedInsights[];
 }
 
-interface IInsights {
+export interface IGroupedInsights {
+  group: string | Date;
+  temperature: IInsight;
+  humidity: IInsight;
+}
+
+export interface IInsight {
   min: number;
   max: number;
   median: number;

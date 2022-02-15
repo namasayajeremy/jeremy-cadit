@@ -19,7 +19,7 @@ import { SalaryService } from './salary.service';
     MatTableModule,
     MatButtonModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   providers: [ElectronService, SalaryService],
 })

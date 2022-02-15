@@ -11,6 +11,10 @@ electron_1.ipcMain.handle('open-file-dialog', function () {
         .then(function (res) { return readFile(res.filePaths[0]); });
 });
 function readFile(path) {
-    return (JSON.parse(fs.readFileSync(path, 'utf8'))).array;
+    var res = {
+        path: path,
+        data: JSON.parse(fs.readFileSync(path, 'utf8')).array,
+    };
+    return res;
 }
 //# sourceMappingURL=file-interface.js.map
