@@ -1,3 +1,29 @@
-<p>{{ roomDayToggle }}</p>
-<p>{{ allInsights | json }}</p>
-<p>{{ displayedInsights | json }}</p>
+<div class="container">
+  <ng-container *ngFor="let chartData of chartDatas">
+    <mat-card>
+      <mat-card-title>{{ chartData.room }}</mat-card-title>
+      <mat-card-content class="chart-container">
+        <mat-card class="chart">
+          <h3>Temperature</h3>
+          <canvas
+            baseChart
+            [type]="chartData.temp.type"
+            [data]="chartData.temp.data"
+            [options]="chartData.temp.options"
+          >
+          </canvas>
+        </mat-card>
+        <mat-card class="chart">
+          <h3>Humidity</h3>
+          <canvas
+            baseChart
+            [type]="chartData.hum.type"
+            [data]="chartData.hum.data"
+            [options]="chartData.hum.options"
+          >
+          </canvas>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

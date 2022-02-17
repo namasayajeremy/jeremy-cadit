@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ElectronService } from '../core/services/electron/electron.service';
 import { SalaryService } from './salary.service';
-import { ISalaryInIDR, IUser } from './salary-model';
+import { IUser } from './salary-model';
 
 @Component({
   selector: 'app-salary-converter',
@@ -36,46 +36,28 @@ export class SalaryConverterComponent {
       });
   }
   openSalaryBtn() {
-    // const salaries = await this.electron //get salary data from file dialog
-    //   .openDialog()
-    //   .then((res) => {
-    //     this.salary.openSuccess(res.path);
-    //     return this.salary.isSalaryData(res.data);
-    //   });
-    // if (salaries) {
-    //   //appends salary data to user data
-    //   const modifiedUsers = await this.salary.addSalaries(
-    //     salaries,
-    //     this.userDatas
-    //   );
-    //   this.userDatas = modifiedUsers;
-    //   //display data
-    //   if (!this.displayedColumns.includes('salaryInIDR')) {
-    //     this.displayedColumns.push('salaryInIDR', 'salaryInUSD');
-    //   }
-    // } else {
-    //   this.salary.wrongFile();
-    // }
     this.electron //get salary data from file dialog
-      .openDialog()
+      .openFileDialog()
       .then((res) => {
-        this.salary.openSuccess(res.path);
+        //send file path notification and checks data model
+        this.salary.successReadNotif(res.path);
         return this.salary.isSalaryData(res.data);
       })
       .then((salaries) => {
+        //isSalaryData() returns null if false
         if (salaries) {
           //appends salary data to user data
           this.salary
-            .addSalaries(salaries, this.userDatas)
+            .assignSalaries(salaries, this.userDatas)
             .then((modifiedUsers) => {
               this.userDatas = modifiedUsers;
+              //if this is the first time adding salaries, push salary column
               if (!this.displayedColumns.includes('salaryInIDR')) {
                 this.displayedColumns.push('salaryInIDR', 'salaryInUSD');
               }
             });
-          //display data
         } else {
-          this.salary.wrongFile();
+          this.salary.wrongFileNotif();
         }
       });
   }

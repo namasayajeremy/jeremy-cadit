@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { SalaryConverterComponent } from './salary-converter/salary-converter.component';
-import { ContainerComponent } from './sensor/container/container.component';
+import { FileComponent } from './sensor/file/file.component';
+import { SimulationComponent } from './sensor/simulation/simulation.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,16 @@ const routes: Routes = [
   },
   {
     path: 'sensor',
-    component: ContainerComponent,
+    children: [
+      {
+        path: 'file',
+        component: FileComponent,
+      },
+      {
+        path: 'simulation',
+        component: SimulationComponent,
+      },
+    ],
   },
   {
     path: '',

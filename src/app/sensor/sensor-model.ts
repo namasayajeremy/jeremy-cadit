@@ -6,17 +6,6 @@ export interface IRawData {
   timestamp: number | string | Date;
 }
 
-export interface IInsightsContainer {
-  room: IGroupedInsights[];
-  day: IGroupedInsights[];
-}
-
-export interface IGroupedInsights {
-  group: string | Date;
-  temperature: IInsight;
-  humidity: IInsight;
-}
-
 export interface IInsight {
   min: number;
   max: number;
@@ -24,6 +13,28 @@ export interface IInsight {
   average: number;
 }
 
-export interface IGroupHelper {
-  [id: string]: IRawData[];
+export interface IRoomDatas {
+  roomArea: string;
+  sensorDatas: IRawData[];
+}
+
+export interface IRoomDayContainer {
+  roomArea: string;
+  dayDatas: IDayData[];
+}
+
+export interface IDayData {
+  date: string;
+  sensorDatas: IRawData[];
+}
+
+export interface IRoomInsight {
+  roomArea: string;
+  dayInsights: IDayInsight[];
+}
+
+export interface IDayInsight {
+  date: Date;
+  temperature: IInsight;
+  humidity: IInsight;
 }

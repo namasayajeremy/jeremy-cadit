@@ -41,7 +41,11 @@ export class ElectronService {
   get isElectron(): boolean {
     return !!(window && window.process && window.process.type);
   }
-  openDialog() {
-    return ipcRenderer.invoke('open-file-dialog');
+  openFileDialog() {
+    return ipcRenderer.invoke('open-file-and-read');
+  }
+
+  watchFile(){
+
   }
 }

@@ -21,7 +21,7 @@ export class SalaryService {
       .catch((error) => console.log(error));
   }
 
-  async addSalaries(salaries: ISalaryInIDR[], userDatas: IUser[]) {
+  async assignSalaries(salaries: ISalaryInIDR[], userDatas: IUser[]) {
     //get usd currency rate
     let usdCurrencyRate: number;
     await this.getUSDCurrencyRate().then((res) => {
@@ -57,13 +57,13 @@ export class SalaryService {
     return salaries[0].salaryInIDR ? salaries : null;
   }
 
-  openSuccess(path?: string) {
+  successReadNotif(path?: string) {
     if(path){
       this.snackbar.open(`File path: ${path}`, 'Close');
     }
   }
 
-  wrongFile() {
+  wrongFileNotif() {
     this.snackbar.open(
       'Wrong file! Please try again and make sure its the salary file.',
       'Close',

@@ -1,0 +1,7 @@
+<div class="app-header">
+  <button mat-raised-button color="accent" (click)="openSensorFileBtn()">
+    Open Sensor File
+  </button>
+</div>
+<app-chart *ngIf="roomInsights" [dataSources]="roomInsights"
+></app-chart>

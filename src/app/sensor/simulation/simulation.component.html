@@ -1,0 +1,13 @@
+<div class="app-header">
+  <button mat-raised-button color="accent" >
+    Select File Directory
+  </button>
+  <button mat-raised-button color="accent" >
+    Start Simulation
+  </button>
+  <button mat-raised-button color="accent">
+    Stop Simulation
+  </button>
+</div>
+<app-chart *ngIf="roomInsights" [dataSources]="roomInsights"
+></app-chart>

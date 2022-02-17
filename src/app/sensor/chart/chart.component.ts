@@ -5,8 +5,14 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { GroupingService } from '../grouping.service';
-import { IGroupedInsights, IInsightsContainer } from '../sensor-model';
+import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
+import { IRoomInsight } from '../sensor-model';
+
+interface IChartHelper {
+  room: string;
+  temp: ChartConfiguration;
+  hum: ChartConfiguration;
+}
 
 @Component({
   selector: 'app-chart',
@@ -14,26 +20,66 @@ import { IGroupedInsights, IInsightsContainer } from '../sensor-model';
   styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit, OnChanges {
-  @Input() allInsights: IInsightsContainer;
-  @Input() roomDayToggle: string;
+  @Input() dataSources: IRoomInsight[];
+  chartDatas: IChartHelper[];
 
-  displayedInsights: IGroupedInsights[] | null;
   constructor() {}
-
   ngOnInit(): void {
-    if (this.roomDayToggle) {
-      this.displayData(this.roomDayToggle);
-    }
+    this.chartDatas = this.formatDatas(this.dataSources);
   }
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.roomDayToggle) {
-      const groupBy = changes.roomDayToggle.currentValue;
-      this.displayedInsights = this.allInsights[groupBy];
+    if (changes.dataSource) {
+      this.chartDatas = this.formatDatas(changes.dataSource.currentValue);
     }
   }
 
-  displayData(groupBy: string) {
-    this.displayedInsights = this.allInsights[groupBy];
+  formatDatas(roomInsights: IRoomInsight[]): IChartHelper[] {
+    const chartDatas: IChartHelper[] = [];
+    roomInsights.forEach((roomInsight) => {
+      const room = roomInsight.roomArea;
+      const temp = this.formatData(roomInsight, 'temperature');
+      const hum = this.formatData(roomInsight, 'humidity');
+      chartDatas.push({ room, temp, hum });
+    });
+    return chartDatas;
+  }
+
+  formatData(
+    roomInsight: IRoomInsight,
+    sensorParam: string
+  ): ChartConfiguration {
+    return {
+      type: 'line',
+      data: {
+        labels: roomInsight.dayInsights.map((data) =>
+          data.date.toLocaleDateString('id-ID')
+        ),
+        datasets: [
+          {
+            label: 'Minimum',
+            data: roomInsight.dayInsights.map((data) => data[sensorParam].min),
+          },
+          {
+            label: 'Maximum',
+            data: roomInsight.dayInsights.map((data) => data[sensorParam].max),
+          },
+          {
+            label: 'Median',
+            data: roomInsight.dayInsights.map(
+              (data) => data[sensorParam].median
+            ),
+          },
+          {
+            label: 'Average',
+            data: roomInsight.dayInsights.map(
+              (data) => data[sensorParam].average
+            ),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+      },
+    };
   }
 }
