@@ -46,7 +46,6 @@ export class SalaryService {
     });
   }
 
-
   //#region other functions
   round(num: number) {
     const dec = 100;
@@ -58,8 +57,8 @@ export class SalaryService {
   }
 
   successReadNotif(path?: string) {
-    if(path){
-      this.snackbar.open(`File path: ${path}`, 'Close');
+    if (path) {
+      this.snackbar.open(`File path: ${path}`, 'Close', { duration: 5000 });
     }
   }
 

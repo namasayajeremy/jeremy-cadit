@@ -1,40 +1,83 @@
-<div class="app-header">
-  <span>File Path: {{ filePath }}</span>
-  <span class="spacer"></span>
-  <button
-    mat-raised-button
-    color="accent"
-    (click)="selectFileDirBtn()"
-    [disabled]="simActive"
-  >
-    Select File Directory
-  </button>
-  <ng-container *ngIf="filePath">
-    <mat-form-field class="no-hint">
-      <mat-label>Number of Room Area</mat-label>
-      <input
-        matInput
-        type="number"
-        [(ngModel)]="numRoom"
-        [disabled]="simActive"
-      />
-    </mat-form-field>
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="startSimulation()"
-      [disabled]="simActive"
-    >
-      Start Simulation
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="stopSimulation()"
-      [disabled]="!simActive"
-    >
-      Stop Simulation
-    </button>
-  </ng-container>
+<div class="container">
+  <mat-card>
+    <mat-card-title>Sensor Insights(Simulation)</mat-card-title>
+    <mat-card-content>
+      <p>
+        Use this page to simulate sensor datas and generate the min, max,
+        median, and average graphs of its insights.
+      </p>
+      Instructions:
+      <ol>
+        <li>
+          Click on the "Select File Directory" button to select where the
+          simulation data will be stored.
+        </li>
+        <li>
+          Set the parameters of the simulation. (interval period and number of
+          room areas)
+        </li>
+        <li>
+          Click on the "Start Simulation" button to generate simulation data and
+          store it to the file path you've chosen
+        </li>
+        <li>Click on the "Stop Simulation" button to stop the simulation.</li>
+        <li>Click on the "Save Insights" button to save the grouped data.</li>
+      </ol>
+      <div class="app-header">
+        <mat-form-field class="no-hint">
+          <mat-label>Period (in seconds)</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="period"
+            [disabled]="simActive"
+          />
+        </mat-form-field>
+        <mat-form-field class="no-hint">
+          <mat-label>Number of Room Area</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="numRoom"
+            [disabled]="simActive"
+          />
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end" class="app-header">
+      <span>File Path Selected: {{ filePath }}</span>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="selectFileDirBtn()"
+        *ngIf="!simActive"
+      >
+        Select File Directory
+      </button>
+      <ng-container *ngIf="filePath">
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="startSimulation()"
+          *ngIf="!simActive"
+        >
+          Start Simulation
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="stopSimulation()"
+          *ngIf="simActive"
+        >
+          Stop Simulation
+        </button>
+      </ng-container>
+    </mat-card-actions>
+  </mat-card>
+
+  <app-chart
+    *ngIf="filePath && roomInsights"
+    [dataSources]="roomInsights"
+  ></app-chart>
 </div>
-<app-chart *ngIf="filePath && roomInsights" [dataSources]="roomInsights"></app-chart>

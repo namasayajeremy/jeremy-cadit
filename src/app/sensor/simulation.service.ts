@@ -7,24 +7,24 @@ import { IRawData } from './sensor-model';
 export class SimulationService {
   constructor() {}
 
-  getDummyDatas(prevID: number, numRoomArea: number): IRawData[] {
+  getDummyDatas(prevID: number, numRoomArea: number, now: Date): IRawData[] {
     const dummyDatas: IRawData[] = [];
     for (let i = 0; i < numRoomArea; i++) {
-      dummyDatas.push(this.createDummyData(prevID + i, i + 1));
+      dummyDatas.push(this.createDummyData(prevID + i, i + 1, now));
     }
     return dummyDatas;
   }
 
-  createDummyData(prevID: number, roomIndex: number): IRawData {
+  createDummyData(prevID: number, roomIndex: number, now: Date): IRawData {
     return {
       id: prevID + 1,
       roomArea: `roomArea${roomIndex}`,
-      timestamp: +new Date(),
+      timestamp: +now,
       temperature: this.getRnd(17, 27),
       humidity: this.getRnd(87, 97),
     };
   }
   getRnd(min: number, max: number) {
-    return (Math.random() * (max - min + 1)) + min;
+    return Math.random() * (max - min + 1) + min;
   }
 }

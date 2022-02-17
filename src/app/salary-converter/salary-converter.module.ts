@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
 
 import { SalaryConverterComponent } from './salary-converter.component';
 import { ElectronService } from '../core/services';
@@ -20,6 +21,7 @@ import { SalaryService } from './salary.service';
     MatButtonModule,
     MatInputModule,
     MatSnackBarModule,
+    MatCardModule,
   ],
   providers: [ElectronService, SalaryService],
 })

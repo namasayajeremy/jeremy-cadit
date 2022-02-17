@@ -33,7 +33,6 @@ function createWindow(): BrowserWindow {
     });
     win.loadURL('http://localhost:4200');
   } else {
-    win.webContents.openDevTools();
     // Path when running electron executable
     let pathIndex = './index.html';
 

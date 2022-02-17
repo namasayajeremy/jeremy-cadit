@@ -1,11 +1,12 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { ElectronService } from '../../core/services';
 import { IRoomInsight } from '../sensor-model';
 

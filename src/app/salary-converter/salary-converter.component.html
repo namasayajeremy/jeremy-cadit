@@ -1,26 +1,43 @@
 <div class="container">
-  <div class="app-header">
-    <mat-form-field class="no-hint">
-      <mat-label>User Data Link</mat-label>
-      <input matInput type="link" [(ngModel)]="dataSourceLink"/>
-    </mat-form-field>
-    <button
-      mat-raised-button
-      color="accent"
-      [disabled]="disableFetchBtn"
-      (click)="fetchUserBtn(dataSourceLink)"
-    >
-      Fetch User Data
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      [disabled]="disableOpenSlryBtn"
-      (click)="openSalaryBtn()"
-    >
-      Open Salary Data
-    </button>
-  </div>
+  <mat-card>
+    <mat-card-title>Salary Converter App</mat-card-title>
+    <mat-card-content>
+      Instructions:
+      <ol>
+        <li>Input the user data json link in the input form above the buttons.</li>
+        <li>
+          Click on the "Fetch User Data" button to fetch the data and generate table.
+        </li>
+        <li>
+          Click on the "Add Salary Data" button to select the salary file to update the table.
+        </li>
+      </ol>
+      <div class="app-header">
+        <mat-form-field class="no-hint max-width">
+          <mat-label>User Data Link</mat-label>
+          <input matInput type="link" [(ngModel)]="dataSourceLink" />
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="disableFetchBtn"
+        (click)="fetchUserBtn(dataSourceLink)"
+      >
+        Fetch User Data
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="disableOpenSlryBtn"
+        (click)="openSalaryBtn()"
+      >
+        Open Salary Data
+      </button>
+    </mat-card-actions>
+  </mat-card>
   <table mat-table [dataSource]="userDatas" class="mat-elevation-z8 mat-small">
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -61,5 +78,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-
 </div>

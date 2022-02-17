@@ -1,7 +1,20 @@
-<div class="app-header">
-  <button mat-raised-button color="accent" (click)="openSensorFileBtn()">
-    Open Sensor File
-  </button>
+<div class="container">
+  <mat-card>
+    <mat-card-title>Sensor Insights(File)</mat-card-title>
+    <mat-card-content>
+      <p>Use this page to generate the min, max, median, and average graphs of a sensor JSON file grouped by its room and day.</p>
+      Instructions:
+      <ol>
+        <li>Click on the "Open Sensor File" button to select the sensor data you want to analyze.</li>
+        <li>Hover to the nodes in the chart to see it's value.</li>
+        <li>Click on the "Save Insights" button to save the grouped data.</li>
+      </ol>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="accent" (click)="openSensorFileBtn()">
+        Open Sensor File
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  <app-chart *ngIf="roomInsights" [dataSources]="roomInsights"></app-chart>
 </div>
-<app-chart *ngIf="roomInsights" [dataSources]="roomInsights"
-></app-chart>

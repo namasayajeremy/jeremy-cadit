@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { interval, takeWhile } from 'rxjs';
 import { ElectronService } from '../../core/services';
 import { GroupingService } from '../grouping.service';
 import { IRawData, IRoomInsight } from '../sensor-model';
@@ -11,12 +10,13 @@ import { SimulationService } from '../simulation.service';
   styleUrls: ['./simulation.component.scss'],
 })
 export class SimulationComponent {
+  counter: number;
   roomInsights: IRoomInsight[];
   numRoom = 1;
+  period = 2;
   disableNumRoom = true;
   filePath: string;
   simActive = false;
-  counter$ = interval(2000).pipe(takeWhile(() => this.simActive));
   constructor(
     private electron: ElectronService,
     private simulation: SimulationService,
@@ -37,20 +37,24 @@ export class SimulationComponent {
     const simData: IRawData[] = [];
     this.roomInsights = [];
     this.electron.createJSONFile(this.filePath);
-    this.counter$.subscribe((x) => {
-      this.simulateData(simData,x);
-    });
+    let i = 0;
+    this.counter = window.setInterval(() => {
+      this.simulateData(simData,i);
+      i++;
+    }, this.period*1000);
   }
 
   stopSimulation() {
     this.simActive = false;
+    window.clearInterval(this.counter);
     this.grouping.simulationComplete(this.filePath);
   }
 
   simulateData = (simData: IRawData[], x: number) => {
     const newDummyDatas = this.simulation.getDummyDatas(
       x * this.numRoom,
-      this.numRoom
+      this.numRoom,
+      new Date()
     );
     simData.push(...newDummyDatas);
     this.roomInsights = this.grouping.getAllInsights(simData);

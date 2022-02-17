@@ -1,3 +1,13 @@
 .mat-cell {
   font-size: x-small;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.max-width{
+  max-width: fit-content;
+}
