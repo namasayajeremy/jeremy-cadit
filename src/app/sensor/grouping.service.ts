@@ -25,6 +25,24 @@ export class GroupingService {
     return roomDayInsights;
   }
 
+  /**
+   * Group datas by room
+   *
+   * @param sensorDatas
+   * @returns
+   * expected return example: (rawDataObj refers to object of IRawData)
+   * [
+   *  {
+   *    "roomArea": roomArea1,
+   *     "sensorDatas": [rawDataObj1, rawDataObj3]
+   *  },
+   *  {
+   *    "roomArea": roomArea2,
+   *     "sensorDatas": [rawDataObj2, rawDataObj4, rawDataObj5]
+   *  },
+   * ]
+   *
+   */
   groupByRoom(sensorDatas: IRawData[]): IRoomDatas[] {
     const roomHelperGroup: IRoomDatas[] = [];
     sensorDatas.forEach((sensorData) => {
@@ -41,6 +59,30 @@ export class GroupingService {
     return roomHelperGroup;
   }
 
+  /**
+   * Groups the data by day for a single room
+   *
+   * @param roomDatas
+   * @returns a helper container which contains daydatas
+   *
+   * expected return example: (dayDataObj refers to object of IDayData)
+   * [
+   *  {
+   *    "roomArea": roomArea1,
+   *     "dayDatas": [dayDataObj1, dayDataObj3]
+   *  },
+   *  {
+   *    "roomArea": roomArea2,
+   *     "dayDatas": [dayDataObj2, dayDataObj4, dayDataObj5]
+   *  },
+   * ]
+   *
+   * object of IDayData example
+   * {
+   *   "date": "18/02/2022",
+   *   "sensorDatas": [rawDataObj1, rawDataObj2]
+   * },
+   */
   groupByDay(roomDatas: IRoomDatas): IRoomDayContainer {
     const dayDatas: IDayData[] = [];
     roomDatas.sensorDatas.forEach((sensorData) => {
@@ -63,6 +105,39 @@ export class GroupingService {
     };
   }
 
+  /**
+   * Abstracts the container to get the day insights of each room.
+   *
+   * @param roomDayData
+   * @returns all day insights of the room in a single object
+   * expected return example: (dayInsightObj refers to object of IDayInsight)
+   * [
+   *  {
+   *    "roomArea": roomArea1,
+   *     "dayInsights": [dayInsightObj1, dayInsightObj2]
+   *  },
+   *  {
+   *    "roomArea": roomArea2,
+   *     "dayInsights": [dayInsightObj3, dayInsightObj4, dayInsightObj5]
+   *  },
+   * ]
+   * object of IDayInsight example
+   * {
+   *   "date": "18/02/2022",
+   *   "temperature" : {
+   *                      min: 17,
+   *                      max: 25,
+   *                      median: 21,
+   *                      average: 20
+   *                   },
+   *   "humidity" : {
+   *                      min: 87,
+   *                      max: 95,
+   *                      median: 91,
+   *                      average: 90
+   *                   }
+   * },
+   */
   getDayInsights(roomDayData: IRoomDayContainer): IRoomInsight {
     const dayInsights = roomDayData.dayDatas.map(this.getDayInsight, this);
     return {
@@ -71,6 +146,12 @@ export class GroupingService {
     };
   }
 
+  /**
+   * Abstract datas of a single day to get its insight
+   *
+   * @param dayData
+   * @returns insight of the day
+   */
   getDayInsight(dayData: IDayData): IDayInsight {
     const tempArray = dayData.sensorDatas
       .map((data) => data.temperature)
