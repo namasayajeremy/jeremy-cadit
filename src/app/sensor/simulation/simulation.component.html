@@ -1,13 +1,40 @@
 <div class="app-header">
-  <button mat-raised-button color="accent" >
+  <span>File Path: {{ filePath }}</span>
+  <span class="spacer"></span>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="selectFileDirBtn()"
+    [disabled]="simActive"
+  >
     Select File Directory
   </button>
-  <button mat-raised-button color="accent" >
-    Start Simulation
-  </button>
-  <button mat-raised-button color="accent">
-    Stop Simulation
-  </button>
+  <ng-container *ngIf="filePath">
+    <mat-form-field class="no-hint">
+      <mat-label>Number of Room Area</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="numRoom"
+        [disabled]="simActive"
+      />
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="startSimulation()"
+      [disabled]="simActive"
+    >
+      Start Simulation
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="stopSimulation()"
+      [disabled]="!simActive"
+    >
+      Stop Simulation
+    </button>
+  </ng-container>
 </div>
-<app-chart *ngIf="roomInsights" [dataSources]="roomInsights"
-></app-chart>
+<app-chart *ngIf="filePath && roomInsights" [dataSources]="roomInsights"></app-chart>

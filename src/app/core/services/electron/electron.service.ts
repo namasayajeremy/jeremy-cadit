@@ -42,10 +42,22 @@ export class ElectronService {
     return !!(window && window.process && window.process.type);
   }
   openFileDialog() {
-    return ipcRenderer.invoke('open-file-and-read');
+    return ipcRenderer.invoke('open-dialog-and-read');
   }
 
-  watchFile(){
+  selectFileDir() {
+    return ipcRenderer.invoke('select-file-directory');
+  }
 
+  saveDatatoDir(data: object[]) {
+    return ipcRenderer.invoke('create-and-store-data', data);
+  }
+
+  createJSONFile(path: string) {
+    return ipcRenderer.send('create-json-file', path);
+  }
+
+  appendToJSONFile(path: string, data: object[]) {
+    return ipcRenderer.send('append-json-file', path, data);
   }
 }

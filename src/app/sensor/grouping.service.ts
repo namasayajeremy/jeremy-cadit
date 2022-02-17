@@ -20,8 +20,8 @@ export class GroupingService {
 
   public getAllInsights(sensorDatas: IRawData[]) {
     const roomDatas = this.groupByRoom(sensorDatas);
-    const roomDayContainer = roomDatas.map(this.groupByDay,this);
-    const roomDayInsights = roomDayContainer.map(this.getDayInsights,this);
+    const roomDayContainer = roomDatas.map(this.groupByDay, this);
+    const roomDayInsights = roomDayContainer.map(this.getDayInsights, this);
     return roomDayInsights;
   }
 
@@ -64,7 +64,7 @@ export class GroupingService {
   }
 
   getDayInsights(roomDayData: IRoomDayContainer): IRoomInsight {
-    const dayInsights = roomDayData.dayDatas.map(this.getDayInsight,this);
+    const dayInsights = roomDayData.dayDatas.map(this.getDayInsight, this);
     return {
       roomArea: roomDayData.roomArea,
       dayInsights,
@@ -108,8 +108,14 @@ export class GroupingService {
 
   successReadNotif(path?: string) {
     if (path) {
-      this.snackbar.open(`File path: ${path}`, 'close',{duration:10000});
+      this.snackbar.open(`File path: ${path}`, 'close', { duration: 5000 });
     }
+  }
+
+  simulationComplete(path: string) {
+    this.snackbar.open(`Simulation datas is saved in: ${path}`, 'close', {
+      duration: 5000,
+    });
   }
 
   wrongFileNotif() {

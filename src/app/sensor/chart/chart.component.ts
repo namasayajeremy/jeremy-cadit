@@ -6,6 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
+import { ElectronService } from '../../core/services';
 import { IRoomInsight } from '../sensor-model';
 
 interface IChartHelper {
@@ -23,13 +24,16 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() dataSources: IRoomInsight[];
   chartDatas: IChartHelper[];
 
-  constructor() {}
+  constructor(private electron: ElectronService) {}
   ngOnInit(): void {
-    this.chartDatas = this.formatDatas(this.dataSources);
+    if (this.dataSources) {
+      console.log(this.dataSources);
+      this.chartDatas = this.formatDatas(this.dataSources);
+    }
   }
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.dataSource) {
-      this.chartDatas = this.formatDatas(changes.dataSource.currentValue);
+    if (changes.dataSources) {
+      this.chartDatas = this.formatDatas(changes.dataSources.currentValue);
     }
   }
 
@@ -81,5 +85,8 @@ export class ChartComponent implements OnInit, OnChanges {
         responsive: true,
       },
     };
+  }
+  saveInsights() {
+    this.electron.saveDatatoDir(this.dataSources);
   }
 }

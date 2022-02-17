@@ -38,26 +38,88 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var fs = require("fs");
-electron_1.ipcMain.handle('open-file-and-read', function () { return __awaiter(void 0, void 0, void 0, function () {
+electron_1.ipcMain.handle('open-dialog-and-read', function () { return __awaiter(void 0, void 0, void 0, function () {
     var res;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, electron_1.dialog
-                    .showOpenDialog({
+            case 0: return [4 /*yield*/, electron_1.dialog.showOpenDialog({
                     properties: ['openFile'],
                     filters: [{ name: 'JSON Files', extensions: ['json'] }],
                 })];
             case 1:
                 res = _a.sent();
-                return [2 /*return*/, readFile(res.filePaths[0])];
+                return [2 /*return*/, readJSONFile(res.filePaths[0])];
         }
     });
 }); });
-function readFile(path) {
+electron_1.ipcMain.handle('select-file-directory', function () { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, electron_1.dialog.showSaveDialog({
+                    title: 'Select directory where JSON File will be stored',
+                    filters: [{ name: 'JSON Files', extensions: ['json'] }],
+                })];
+            case 1:
+                res = _a.sent();
+                if (res.filePath) {
+                    return [2 /*return*/, res];
+                }
+                return [2 /*return*/];
+        }
+    });
+}); });
+electron_1.ipcMain.handle('create-and-store-data', function (event, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, electron_1.dialog.showSaveDialog({
+                    title: 'Choose file directory to save file',
+                    filters: [{ name: 'JSON Files', extensions: ['json'] }],
+                })];
+            case 1:
+                res = _a.sent();
+                if (res.filePath) {
+                    createJSONFIle(res.filePath, data);
+                    return [2 /*return*/, res];
+                }
+                return [2 /*return*/];
+        }
+    });
+}); });
+electron_1.ipcMain.on('create-json-file', function (event, path) { return createJSONFIle(path); });
+electron_1.ipcMain.on('append-json-file', function (event, path, data) { return appendJSON(path, data); });
+function readJSONFile(path) {
     var res = {
         path: path,
         data: JSON.parse(fs.readFileSync(path, 'utf8')).array,
     };
     return res;
+}
+function createJSONFIle(path, data) {
+    var json;
+    if (data) {
+        json = "{\"array\":" + JSON.stringify(data) + "}";
+    }
+    else {
+        json = '{"array":[]}';
+    }
+    fs.writeFile(path, json, 'utf-8', function (err) {
+        if (err)
+            throw err;
+    });
+}
+function appendJSON(path, simulationData) {
+    fs.readFile(path, function (err, data) {
+        var _a;
+        if (err)
+            throw err;
+        var json = JSON.parse(data.toString('utf-8'));
+        (_a = json.array).push.apply(_a, simulationData);
+        fs.writeFile(path, JSON.stringify(json), function (err) {
+            if (err)
+                throw err;
+        });
+    });
 }
 //# sourceMappingURL=file-interface.js.map
