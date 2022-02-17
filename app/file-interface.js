@@ -69,7 +69,7 @@ electron_1.ipcMain.handle('select-file-directory', function () { return __awaite
         }
     });
 }); });
-electron_1.ipcMain.handle('create-and-store-data', function (event, data) { return __awaiter(void 0, void 0, void 0, function () {
+electron_1.ipcMain.on('create-and-store-data', function (event, data) { return __awaiter(void 0, void 0, void 0, function () {
     var res;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -81,7 +81,6 @@ electron_1.ipcMain.handle('create-and-store-data', function (event, data) { retu
                 res = _a.sent();
                 if (res.filePath) {
                     createJSONFIle(res.filePath, data);
-                    return [2 /*return*/, res];
                 }
                 return [2 /*return*/];
         }

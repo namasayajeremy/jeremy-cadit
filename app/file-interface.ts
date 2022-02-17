@@ -19,14 +19,13 @@ ipcMain.handle('select-file-directory', async () => {
   }
 });
 
-ipcMain.handle('create-and-store-data', async (event, data) => {
+ipcMain.on('create-and-store-data', async (event, data) => {
   const res = await dialog.showSaveDialog({
     title: 'Choose file directory to save file',
     filters: [{ name: 'JSON Files', extensions: ['json'] }],
   });
   if (res.filePath) {
     createJSONFIle(res.filePath, data);
-    return res;
   }
 });
 

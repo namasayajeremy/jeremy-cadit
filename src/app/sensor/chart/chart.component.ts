@@ -27,7 +27,6 @@ export class ChartComponent implements OnInit, OnChanges {
   constructor(private electron: ElectronService) {}
   ngOnInit(): void {
     if (this.dataSources) {
-      console.log(this.dataSources);
       this.chartDatas = this.formatDatas(this.dataSources);
     }
   }

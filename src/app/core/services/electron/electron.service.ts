@@ -50,7 +50,7 @@ export class ElectronService {
   }
 
   saveDatatoDir(data: object[]) {
-    return ipcRenderer.invoke('create-and-store-data', data);
+    return ipcRenderer.send('create-and-store-data', data);
   }
 
   createJSONFile(path: string) {

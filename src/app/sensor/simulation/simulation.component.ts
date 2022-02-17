@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { interval, Observable, takeWhile } from 'rxjs';
+import { Component } from '@angular/core';
+import { interval, takeWhile } from 'rxjs';
 import { ElectronService } from '../../core/services';
 import { GroupingService } from '../grouping.service';
 import { IRawData, IRoomInsight } from '../sensor-model';
@@ -37,7 +37,6 @@ export class SimulationComponent {
     const simData: IRawData[] = [];
     this.roomInsights = [];
     this.electron.createJSONFile(this.filePath);
-    console.log(simData);
     this.counter$.subscribe((x) => {
       this.simulateData(simData,x);
     });
