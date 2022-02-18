@@ -13,14 +13,14 @@ To get started, the project is made on angular within electron.js encapsulation.
 Angular is a free and open-source development platform that is built on TypeScript. It is used for creating web-app with component-based architecture. Angular provides basic libraries and workflow like routing, forms management, ect. 
 
 There are 3 main concepts from angular that are used throughout the app:
-1. Components
+1. Components:
 A single component consists of a html file, css(scss) file, a typescript file, and a test file(unused). 
 In Angular, javascripts are not provided on a script tag, but instead the javascript(typescript to be exact) is the entry point of a component.
 
-2. Modules
+2. Modules:
 Components needs to be declared by a module. A module contains the information of the context where components, other modules, and services exist. It provides abstraction of what goes where and allow angular to "tree-shake" unused imports.
 
-3. Services
+3. Services: 
 A service is an injectable codes that provides abstraction to codes that needs to be reused/shared between components.
 
 ### Electron.js
@@ -39,7 +39,7 @@ Once it's finished installing the node modules, run "npm run electron:build" to 
 
 Directory to look at: src/app
 
-A folder contains: component html file, component scss file, component ts file, module file, data model file, and service file. Their purposes are:
+A folder is supposed to contain: component folders(with its component html file, component scss file, component ts file), a module file, a data model file, and service files.Their functions are:
 1. HTML -> Basic look of the GUI
 2. SCSS -> Specific design-related property of the element in HTML
 3. TS -> UI/UX related function (handles button click, disabling elements, calling services)
@@ -47,9 +47,9 @@ A folder contains: component html file, component scss file, component ts file, 
 5. model -> contain interface(class) of types used by the component
 6. module -> declarations and imports
 
-It is advised to open the ts file first as the entry point
+It is advised to open the ts files first as the entry point
 
-Native functions like filesystem access are placed outside of the browserwindow context and is located in app/file-interface.ts
+Note: native functions like filesystem access are placed outside of the browserwindow context and is located in app folder. In that folder, there are 2 files to check out: main.ts(electron initialization) and file-interface.ts(file access)
 
 ### Salary Converter
 
