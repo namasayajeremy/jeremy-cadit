@@ -31,7 +31,7 @@ Electron is also used to package the whole app into an exe file that can be easi
 ## Developer guide
 
 To setup for development, run "npm install", then go to app folder by running "cd app" and do another "npm install".
-Once it's finished installing the node modules, run "npm run electron:build" to serve the app.
+Once it's finished installing the node modules, run "npm run electron:local" to serve the app.
 
 ## Code Explanation
 
